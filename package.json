@@ -1,0 +1,12 @@
+{
+  "name": "cine-cloud",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static file server for Cine-Cloud OS",
+  "scripts": {
+    "start": "http-server src -p $PORT"
+  },
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
+}
