@@ -20,7 +20,7 @@ I should have put like helpful comments for ya here and there that can help you.
 
 /* START OF CSS!!! */
 :root {
-  --bg: #242424;
+  --bg: #050505;
   --glass: rgba(22, 22, 25, 0.6);
   --glass-hover: rgba(35, 35, 40, 0.8);
   --border: rgba(255, 255, 255, 0.08);
@@ -179,14 +179,14 @@ body {
 
 .c-h {
   position: relative; aspect-ratio: 16/9; border-radius: 14px; overflow: hidden; cursor: pointer;
-  background: #080808; border: 1px solid var(--border); flex-shrink: 0;
+  background: #050505; border: 1px solid var(--border); flex-shrink: 0;
   transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); width: 320px; /* fixed width for marquee */
 }
 .grid-h .c-h { width: 100%; } /* normal grids */
 
 .c-v {
   position: relative; aspect-ratio: 3/4; border-radius: 12px; overflow: hidden; cursor: pointer;
-  background: #080808; border: 1px solid var(--border);
+  background: #050505; border: 1px solid var(--border);
   transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -387,7 +387,7 @@ body {
 }
 #frame-area.show { max-height: 2500px; opacity: 1; }
 
-.f-box { background: #080808; border: 1px solid var(--border); border-radius: 16px; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: left; }
+.f-box { background: #050505; border: 1px solid var(--border); border-radius: 16px; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: left; }
 .f-box h3 { margin: 0 0 15px 0; font-size: 15px; font-weight: 500; color: #fff; display: flex; align-items: center; gap: 10px;}
 .f-box h3::before { content: ''; width: 4px; height: 14px; background: #fff; border-radius: 4px; }
 .f-box iframe { width: 100%; border: none; border-radius: 10px; background: #fff; }
@@ -649,8 +649,24 @@ body {
   </div>
 </div>
 
-<div id="game-layer" style="display:none; position:fixed; inset:0; background:#000; z-index:900;">
-  <div id="bS" style="position:absolute; inset:0; background:#000; z-index:9002; display:flex; flex-direction:column; justify-content:center; align-items:center; color:#fff; font-family:sans-serif;">
+<div class="popup-wrap" id="p-pass-block">
+  <div class="popup-box">
+    <div class="popup-icon-container">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+    </div>
+    <h2>Password Required</h2>
+    <p>Please enter the access password to launch this game.</p>
+    <input type="password" id="game-password" placeholder="Enter Password" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; margin-bottom: 15px; outline: none; font-family: 'Inter', sans-serif;">
+    <div id="pass-error" style="color: #ff4d4d; font-size: 13px; margin-bottom: 15px; display: none;">Incorrect password. Please try again.</div>
+    <div class="popup-btn-row">
+      <button class="popup-btn secondary" onclick="hidePopup('p-pass-block')">Cancel</button>
+      <button class="popup-btn primary" onclick="checkPassword()">Verify</button>
+    </div>
+  </div>
+</div>
+
+<div id="game-layer" style="display:none; position:fixed; inset:0; background:#050505; z-index:900;">
+  <div id="bS" style="position:absolute; inset:0; background:#050505; z-index:9002; display:flex; flex-direction:column; justify-content:center; align-items:center; color:#fff; font-family:sans-serif;">
     <h2 id="bS-t" style="margin:0 0 20px 0;">Loading...</h2>
     <span style="font-size:14px; color:#aaa; text-align:center; max-width:450px; line-height:1.6;">Notice: If you exit fullscreen, the mouse lock will break.<br>Use <b>ALT + Z</b> (hold 3s) to lock mouse and fullscreen.<br>Use <b>ALT + C</b> (hold 3s) to safely exit.</span>
   </div>
@@ -941,6 +957,17 @@ function clsMdl() {
   setTimeout(() => m.style.display = 'none', 500);
 }
 
+function checkPassword() {
+  let p = document.getElementById('game-password').value;
+  if(p === 'cine-cloud') {
+    hidePopup('p-pass-block');
+    showPopup('p-tut-block');
+    wAt = true;
+  } else {
+    document.getElementById('pass-error').style.display = 'block';
+  }
+}
+
 let wAt = false;
 let dEn = 0;
 let tTr;
@@ -950,21 +977,28 @@ function try2launch() {
     showPopup('p-sess-block');
     return;
   }
-  showPopup('p-tut-block');
-  wAt = true;
+  document.getElementById('game-password').value = '';
+  document.getElementById('pass-error').style.display = 'none';
+  showPopup('p-pass-block');
+  setTimeout(() => document.getElementById('game-password').focus(), 300);
 }
 
 window.addEventListener('keydown', (e) => {
-  if(e.key === 'Enter' && wAt) {
-    e.preventDefault(); 
-    dEn++;
-    clearTimeout(tTr);
-    tTr = setTimeout(() => { dEn = 0; }, 500);
-    
-    if(dEn === 2) {
-      hidePopup('p-tut-block');
-      wAt = false; dEn = 0;
-      rnLd();
+  if(e.key === 'Enter') {
+    if(document.getElementById('p-pass-block').classList.contains('show')) {
+      e.preventDefault();
+      checkPassword();
+    } else if(wAt) {
+      e.preventDefault(); 
+      dEn++;
+      clearTimeout(tTr);
+      tTr = setTimeout(() => { dEn = 0; }, 500);
+      
+      if(dEn === 2) {
+        hidePopup('p-tut-block');
+        wAt = false; dEn = 0;
+        rnLd();
+      }
     }
   }
 });
