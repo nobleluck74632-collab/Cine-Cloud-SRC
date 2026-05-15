@@ -438,10 +438,10 @@ body {
 
 <div id="app-wrap">
 
-  <div id="v-cine" class="tab-view active">
+  <div id="v-sigma" class="tab-view active">
     <div id="error-fallback" style="display:none;"></div>
     
-    <div id="cine-content">
+    <div id="sigma-content">
       <div class="sec-head" id="hc-head" style="margin-top:0;">Continue Playing</div>
       <div class="hero-cont" id="hc-box" onclick="">
         <img src="" id="hc-img" class="h-img">
@@ -532,7 +532,7 @@ body {
   <div class="main-dock">
     <img src="https://freepngimg.com/convert-png/89656-icons-circle-computer-black-white-steam" class="d-logo">
     <div class="d-sep"></div>
-    <div class="d-btn active" id="b-cine" onclick="chgTab('cine')">Home</div>
+    <div class="d-btn active" id="b-sigma" onclick="chgTab('sigma')">Home</div>
     <div class="d-btn" id="b-lib" onclick="chgTab('lib')">Library</div>
     <div class="d-btn" id="b-tut" onclick="chgTab('tut')">Tutorial</div>
   </div>
@@ -670,8 +670,8 @@ body {
 
 <script>
 //  THE FUNCTIONALITTTYTYYYYYYYYY!!! 
-let lsDB = JSON.parse(localStorage.getItem('cine_store_v10') || '{}');
-function sLS() { localStorage.setItem('cine_store_v10', JSON.stringify(lsDB)); }
+let lsDB = JSON.parse(localStorage.getItem('sigma_store_v10') || '{}');
+function sLS() { localStorage.setItem('sigma_store_v10', JSON.stringify(lsDB)); }
 
 function msToTm(s) {
   if(!s) return "0m";
@@ -699,7 +699,7 @@ function formatPlaytimeHover(secs) {
 
 window.addEventListener('load', () => {
   // legal notice
-  if(!localStorage.getItem('cine_legal_accepted')) {
+  if(!localStorage.getItem('sigma_legal_accepted')) {
     showPopup('p-legal-block');
   }
 
@@ -900,7 +900,7 @@ function checkLegalScroll(el) {
   }
 }
 function acceptLegal() {
-  localStorage.setItem('cine_legal_accepted', 'true');
+  localStorage.setItem('sigma_legal_accepted', 'true');
   hidePopup('p-legal-block');
 }
 
